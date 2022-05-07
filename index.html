@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+
+        input{
+            padding: 0.3em;
+            border: none;
+            border-bottom: 1px solid rgb(255, 255, 255);
+            background: none;
+            color: white;
+        }
+
+        textarea:focus, input:focus{
+            outline: none;
+            color: white;
+        }
+
+        .lds-dual-ring {
+  display: none;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 90vh;">
+        <h1>getCep</h1>
+        <div style="margin: 10px 0px">
+            <div id="teste" class="lds-dual-ring"></div>
+        </div>
+        <input type="text" placeholder="Digite um cep" id="find" onblur="getCep()">
+            <div style="display: flex; margin: 25px 0px">
+                <input style="margin: 0px 15px" type="text" placeholder="Endereço" id="address">
+                <input style="margin: 0px 15px" type="text" placeholder="Complemento" id="complement">
+            </div>
+                <div style="display: flex;">
+                <input style="margin: 0px 15px" type="text" placeholder="Bairro" id="district">
+                <input style="margin: 0px 15px" type="text" placeholder="Cidade" id="city">
+                <input style="margin: 0px 15px" type="text" placeholder="Estado" id="state">
+            </div>
+    </div>
+    <script>
+
+        let address = document.getElementById('address')
+        let complement = document.getElementById('complement')
+        let district = document.getElementById('district')
+        let city = document.getElementById('city')
+        let state = document.getElementById('state')
+
+        function getCep(){
+            let loading = document.getElementById('teste')
+            let teste = document.getElementById('find').value
+            if (teste.length > 0){
+                loading.style.display = 'inline-block'
+            }
+            if (teste.length > 0){
+                setTimeout(() => {
+                axios.get(`https://viacep.com.br/ws/${teste}/json/`).then(response => 
+                (
+                    address.value = response.data.logradouro,
+                    complement.value = response.data.complemento ? response.data.complemento : 'Não possui complemento',
+                    district.value = response.data.bairro,
+                    city.value = response.data.localidade,
+                    state.value = response.data.uf
+                ))
+                .catch(err => (
+                    alert('Erro ao consultar cep, tente novamente.'),
+                    console.log('Erro: ' + err)
+                ))
+                loading.style.display = 'none'
+                }, "2000")
+            }
+        }
+    </script>
+</body>
+</html>
