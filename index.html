@@ -70,6 +70,7 @@
     </div>
     <script>
 
+        let finder = document.getElementById('find')
         let address = document.getElementById('address')
         let complement = document.getElementById('complement')
         let district = document.getElementById('district')
@@ -94,6 +95,12 @@
                 ))
                 .catch(err => (
                     alert('Erro ao consultar cep, tente novamente.'),
+                    address.value = '',
+                    complement.value = '',
+                    district.value = '',
+                    city.value = '',
+                    state.value = '',
+                    finder.value = '',
                     console.log('Erro: ' + err)
                 ))
                 loading.style.display = 'none'
